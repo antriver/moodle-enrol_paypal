@@ -178,6 +178,14 @@ class enrol_paypal_plugin extends enrol_plugin {
             return ob_get_clean();
         }
 
+        // Hide this enrolment method if there's a prerequisite course and the user isn't enroled in it
+        if (!empty($instance->customint1)) {
+            $requiredcontext = context_course::instance($instance->customint1);
+            if (!is_enrolled($requiredcontext, $USER, '', true)) {
+                return ob_get_clean();
+            }
+        }
+
         $course = $DB->get_record('course', array('id'=>$instance->courseid));
         $context = context_course::instance($course->id);
 
