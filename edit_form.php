@@ -30,6 +30,8 @@ require_once($CFG->libdir.'/formslib.php');
 class enrol_paypal_edit_form extends moodleform {
 
     function definition() {
+        global $DB;
+
         $mform = $this->_form;
 
         list($instance, $plugin, $context) = $this->_customdata;
@@ -64,6 +66,16 @@ class enrol_paypal_edit_form extends moodleform {
         $mform->addElement('duration', 'enrolperiod', get_string('enrolperiod', 'enrol_paypal'), array('optional' => true, 'defaultunit' => 86400));
         $mform->setDefault('enrolperiod', $plugin->get_config('enrolperiod'));
         $mform->addHelpButton('enrolperiod', 'enrolperiod', 'enrol_paypal');
+
+        // Load all courses to show in the selector
+        $courses = $DB->get_records('course', null, 'fullname', 'id, fullname');
+        $courselist = array(0 => '');
+        foreach ($courses as $course) {
+            $courselist[$course->id] = $course->fullname;
+        }
+        $mform->addElement('select', 'customint1', get_string('requiredcourse', 'enrol_paypal'), $courselist);
+        $mform->setDefault('customint1', $plugin->get_config('requiredcourse'));
+        $mform->addHelpButton('customint1', 'requiredcourse', 'enrol_paypal');
 
         $mform->addElement('date_time_selector', 'enrolstartdate', get_string('enrolstartdate', 'enrol_paypal'), array('optional' => true));
         $mform->setDefault('enrolstartdate', 0);

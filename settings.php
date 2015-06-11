@@ -71,4 +71,15 @@ if ($ADMIN->fulltree) {
 
     $settings->add(new admin_setting_configduration('enrol_paypal/enrolperiod',
         get_string('enrolperiod', 'enrol_paypal'), get_string('enrolperiod_desc', 'enrol_paypal'), 0));
+
+    if (!during_initial_install()) {
+        // Load all courses to show in the selector
+        $courses = $DB->get_records('course', null, 'fullname', 'id, fullname');
+        $courselist = array(0 => '');
+        foreach ($courses as $course) {
+            $courselist[$course->id] = $course->fullname;
+        }
+        $settings->add(new admin_setting_configselect('enrol_paypal/requiredcourse', get_string('requiredcourse', 'enrol_paypal'), get_string('requiredcourse_desc', 'enrol_paypal'), 0, $courselist));
+    }
+
 }
