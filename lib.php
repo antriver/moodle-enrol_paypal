@@ -19,7 +19,7 @@
  *
  * This plugin allows you to set up paid courses.
  *
- * @package    enrol_paypal
+ * @package    enrol_paypalupgrade
  * @copyright  2010 Eugene Venter
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -31,7 +31,7 @@ defined('MOODLE_INTERNAL') || die();
  * @author  Eugene Venter - based on code by Martin Dougiamas and others
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class enrol_paypal_plugin extends enrol_plugin {
+class enrol_paypalupgrade_plugin extends enrol_plugin {
 
     public function get_currencies() {
         // See https://www.paypal.com/cgi-bin/webscr?cmd=p/sell/mc/mc_intro-outside,
@@ -72,7 +72,7 @@ class enrol_paypal_plugin extends enrol_plugin {
             break;
         }
         if ($found) {
-            return array(new pix_icon('icon', get_string('pluginname', 'enrol_paypal'), 'enrol_paypal'));
+            return array(new pix_icon('icon', get_string('pluginname', 'enrol_paypalupgrade'), 'enrol_paypalupgrade'));
         }
         return array();
     }
@@ -83,12 +83,12 @@ class enrol_paypal_plugin extends enrol_plugin {
     }
 
     public function allow_unenrol(stdClass $instance) {
-        // users with unenrol cap may unenrol other users manually - requires enrol/paypal:unenrol
+        // users with unenrol cap may unenrol other users manually - requires enrol/paypalupgrade:unenrol
         return true;
     }
 
     public function allow_manage(stdClass $instance) {
-        // users with manage cap may tweak period and status - requires enrol/paypal:manage
+        // users with manage cap may tweak period and status - requires enrol/paypalupgrade:manage
         return true;
     }
 
@@ -103,13 +103,13 @@ class enrol_paypal_plugin extends enrol_plugin {
      * @return void
      */
     public function add_course_navigation($instancesnode, stdClass $instance) {
-        if ($instance->enrol !== 'paypal') {
+        if ($instance->enrol !== 'paypalupgrade') {
              throw new coding_exception('Invalid enrol instance type!');
         }
 
         $context = context_course::instance($instance->courseid);
-        if (has_capability('enrol/paypal:config', $context)) {
-            $managelink = new moodle_url('/enrol/paypal/edit.php', array('courseid'=>$instance->courseid, 'id'=>$instance->id));
+        if (has_capability('enrol/paypalupgrade:config', $context)) {
+            $managelink = new moodle_url('/enrol/paypalupgrade/edit.php', array('courseid'=>$instance->courseid, 'id'=>$instance->id));
             $instancesnode->add($this->get_instance_name($instance), $managelink, navigation_node::TYPE_SETTING);
         }
     }
@@ -122,15 +122,15 @@ class enrol_paypal_plugin extends enrol_plugin {
     public function get_action_icons(stdClass $instance) {
         global $OUTPUT;
 
-        if ($instance->enrol !== 'paypal') {
+        if ($instance->enrol !== 'paypalupgrade') {
             throw new coding_exception('invalid enrol instance!');
         }
         $context = context_course::instance($instance->courseid);
 
         $icons = array();
 
-        if (has_capability('enrol/paypal:config', $context)) {
-            $editlink = new moodle_url("/enrol/paypal/edit.php", array('courseid'=>$instance->courseid, 'id'=>$instance->id));
+        if (has_capability('enrol/paypalupgrade:config', $context)) {
+            $editlink = new moodle_url("/enrol/paypalupgrade/edit.php", array('courseid'=>$instance->courseid, 'id'=>$instance->id));
             $icons[] = $OUTPUT->action_icon($editlink, new pix_icon('t/edit', get_string('edit'), 'core',
                     array('class' => 'iconsmall')));
         }
@@ -146,12 +146,12 @@ class enrol_paypal_plugin extends enrol_plugin {
     public function get_newinstance_link($courseid) {
         $context = context_course::instance($courseid, MUST_EXIST);
 
-        if (!has_capability('moodle/course:enrolconfig', $context) or !has_capability('enrol/paypal:config', $context)) {
+        if (!has_capability('moodle/course:enrolconfig', $context) or !has_capability('enrol/paypalupgrade:config', $context)) {
             return NULL;
         }
 
         // multiple instances supported - different cost for different roles
-        return new moodle_url('/enrol/paypal/edit.php', array('courseid'=>$courseid));
+        return new moodle_url('/enrol/paypalupgrade/edit.php', array('courseid'=>$courseid));
     }
 
     /**
@@ -209,7 +209,7 @@ class enrol_paypal_plugin extends enrol_plugin {
         }
 
         if (abs($cost) < 0.01) { // no cost, other enrolment methods (instances) should be used
-            echo '<p>'.get_string('nocost', 'enrol_paypal').'</p>';
+            echo '<p>'.get_string('nocost', 'enrol_paypalupgrade').'</p>';
         } else {
 
             // Calculate localised and "." cost, make sure we send PayPal the same value,
@@ -240,7 +240,7 @@ class enrol_paypal_plugin extends enrol_plugin {
                 $usercity        = $USER->city;
                 $instancename    = $this->get_instance_name($instance);
 
-                include($CFG->dirroot.'/enrol/paypal/enrol.html');
+                include($CFG->dirroot.'/enrol/paypalupgrade/enrol.html');
             }
 
         }
@@ -304,11 +304,11 @@ class enrol_paypal_plugin extends enrol_plugin {
         $instance = $ue->enrolmentinstance;
         $params = $manager->get_moodlepage()->url->params();
         $params['ue'] = $ue->id;
-        if ($this->allow_unenrol($instance) && has_capability("enrol/paypal:unenrol", $context)) {
+        if ($this->allow_unenrol($instance) && has_capability("enrol/paypalupgrade:unenrol", $context)) {
             $url = new moodle_url('/enrol/unenroluser.php', $params);
             $actions[] = new user_enrolment_action(new pix_icon('t/delete', ''), get_string('unenrol', 'enrol'), $url, array('class'=>'unenrollink', 'rel'=>$ue->id));
         }
-        if ($this->allow_manage($instance) && has_capability("enrol/paypal:manage", $context)) {
+        if ($this->allow_manage($instance) && has_capability("enrol/paypalupgrade:manage", $context)) {
             $url = new moodle_url('/enrol/editenrolment.php', $params);
             $actions[] = new user_enrolment_action(new pix_icon('t/edit', ''), get_string('edit'), $url, array('class'=>'editenrollink', 'rel'=>$ue->id));
         }
@@ -338,7 +338,7 @@ class enrol_paypal_plugin extends enrol_plugin {
      */
     public function can_delete_instance($instance) {
         $context = context_course::instance($instance->courseid);
-        return has_capability('enrol/paypal:config', $context);
+        return has_capability('enrol/paypalupgrade:config', $context);
     }
 
     /**
@@ -349,6 +349,6 @@ class enrol_paypal_plugin extends enrol_plugin {
      */
     public function can_hide_show_instance($instance) {
         $context = context_course::instance($instance->courseid);
-        return has_capability('enrol/paypal:config', $context);
+        return has_capability('enrol/paypalupgrade:config', $context);
     }
 }

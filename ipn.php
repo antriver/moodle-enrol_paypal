@@ -22,7 +22,7 @@
  * If PayPal verifies this then it sets up the enrolment for that
  * user.
  *
- * @package    enrol_paypal
+ * @package    enrol_paypalupgrade
  * @copyright 2010 Eugene Venter
  * @author     Eugene Venter - based on code by others
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -40,7 +40,7 @@ require_once($CFG->libdir . '/filelib.php');
 
 // PayPal does not like when we return error messages here,
 // the custom handler just logs exceptions and stops.
-set_exception_handler('enrol_paypal_ipn_exception_handler');
+set_exception_handler('enrol_paypalupgrade_ipn_exception_handler');
 
 /// Keep out casual intruders
 if (empty($_POST) or !empty($_GET)) {
@@ -73,26 +73,26 @@ $data->timeupdated      = time();
 /// get the user and course records
 
 if (! $user = $DB->get_record("user", array("id"=>$data->userid))) {
-    message_paypal_error_to_admin("Not a valid user id", $data);
+    message_paypalupgrade_error_to_admin("Not a valid user id", $data);
     die;
 }
 
 if (! $course = $DB->get_record("course", array("id"=>$data->courseid))) {
-    message_paypal_error_to_admin("Not a valid course id", $data);
+    message_paypalupgrade_error_to_admin("Not a valid course id", $data);
     die;
 }
 
 if (! $context = context_course::instance($course->id, IGNORE_MISSING)) {
-    message_paypal_error_to_admin("Not a valid context id", $data);
+    message_paypalupgrade_error_to_admin("Not a valid context id", $data);
     die;
 }
 
 if (! $plugin_instance = $DB->get_record("enrol", array("id"=>$data->instanceid, "status"=>0))) {
-    message_paypal_error_to_admin("Not a valid instance id", $data);
+    message_paypalupgrade_error_to_admin("Not a valid instance id", $data);
     die;
 }
 
-$plugin = enrol_get_plugin('paypal');
+$plugin = enrol_get_plugin('paypalupgrade');
 
 /// Open a connection back to PayPal to validate the data
 $paypaladdr = empty($CFG->usepaypalsandbox) ? 'www.paypal.com' : 'www.sandbox.paypal.com';
@@ -108,7 +108,7 @@ $result = $c->post($location, $req, $options);
 
 if (!$result) {  /// Could not connect to PayPal - FAIL
     echo "<p>Error: could not access paypal.com</p>";
-    message_paypal_error_to_admin("Could not access paypal.com to verify payment", $data);
+    message_paypalupgrade_error_to_admin("Could not access paypal.com to verify payment", $data);
     die;
 }
 
@@ -127,14 +127,14 @@ if (strlen($result) > 0) {
 
         if ($data->payment_status != "Completed" and $data->payment_status != "Pending") {
             $plugin->unenrol_user($plugin_instance, $data->userid);
-            message_paypal_error_to_admin("Status not completed or pending. User unenrolled from course", $data);
+            message_paypalupgrade_error_to_admin("Status not completed or pending. User unenrolled from course", $data);
             die;
         }
 
         // If currency is incorrectly set then someone maybe trying to cheat the system
 
         if ($data->mc_currency != $plugin_instance->currency) {
-            message_paypal_error_to_admin("Currency does not match course settings, received: ".$data->mc_currency, $data);
+            message_paypalupgrade_error_to_admin("Currency does not match course settings, received: ".$data->mc_currency, $data);
             die;
         }
 
@@ -144,8 +144,8 @@ if (strlen($result) > 0) {
         if ($data->payment_status == "Pending" and $data->pending_reason != "echeck") {
             $eventdata = new stdClass();
             $eventdata->modulename        = 'moodle';
-            $eventdata->component         = 'enrol_paypal';
-            $eventdata->name              = 'paypal_enrolment';
+            $eventdata->component         = 'enrol_paypalupgrade';
+            $eventdata->name              = 'paypalupgrade_enrolment';
             $eventdata->userfrom          = get_admin();
             $eventdata->userto            = $user;
             $eventdata->subject           = "Moodle: PayPal payment";
@@ -155,7 +155,7 @@ if (strlen($result) > 0) {
             $eventdata->smallmessage      = '';
             message_send($eventdata);
 
-            message_paypal_error_to_admin("Payment pending", $data);
+            message_paypalupgrade_error_to_admin("Payment pending", $data);
             die;
         }
 
@@ -171,26 +171,26 @@ if (strlen($result) > 0) {
 
 
 
-        if ($existing = $DB->get_record("enrol_paypal", array("txn_id"=>$data->txn_id))) {   // Make sure this transaction doesn't exist already
-            message_paypal_error_to_admin("Transaction $data->txn_id is being repeated!", $data);
+        if ($existing = $DB->get_record("enrol_paypalupgrade", array("txn_id"=>$data->txn_id))) {   // Make sure this transaction doesn't exist already
+            message_paypalupgrade_error_to_admin("Transaction $data->txn_id is being repeated!", $data);
             die;
 
         }
 
         if (core_text::strtolower($data->business) !== core_text::strtolower($plugin->get_config('paypalbusiness'))) {   // Check that the email is the one we want it to be
-            message_paypal_error_to_admin("Business email is {$data->business} (not ".
+            message_paypalupgrade_error_to_admin("Business email is {$data->business} (not ".
                     $plugin->get_config('paypalbusiness').")", $data);
             die;
 
         }
 
         if (!$user = $DB->get_record('user', array('id'=>$data->userid))) {   // Check that user exists
-            message_paypal_error_to_admin("User $data->userid doesn't exist", $data);
+            message_paypalupgrade_error_to_admin("User $data->userid doesn't exist", $data);
             die;
         }
 
         if (!$course = $DB->get_record('course', array('id'=>$data->courseid))) { // Check that course exists
-            message_paypal_error_to_admin("Course $data->courseid doesn't exist", $data);
+            message_paypalupgrade_error_to_admin("Course $data->courseid doesn't exist", $data);
             die;
         }
 
@@ -207,14 +207,14 @@ if (strlen($result) > 0) {
         $cost = format_float($cost, 2, false);
 
         if ($data->payment_gross < $cost) {
-            message_paypal_error_to_admin("Amount paid is not enough ($data->payment_gross < $cost))", $data);
+            message_paypalupgrade_error_to_admin("Amount paid is not enough ($data->payment_gross < $cost))", $data);
             die;
 
         }
 
         // ALL CLEAR !
 
-        $DB->insert_record("enrol_paypal", $data);
+        $DB->insert_record("enrol_paypalupgrade", $data);
 
         if ($plugin_instance->enrolperiod) {
             $timestart = time();
@@ -249,8 +249,8 @@ if (strlen($result) > 0) {
 
             $eventdata = new stdClass();
             $eventdata->modulename        = 'moodle';
-            $eventdata->component         = 'enrol_paypal';
-            $eventdata->name              = 'paypal_enrolment';
+            $eventdata->component         = 'enrol_paypalupgrade';
+            $eventdata->name              = 'paypalupgrade_enrolment';
             $eventdata->userfrom          = empty($teacher) ? core_user::get_support_user() : $teacher;
             $eventdata->userto            = $user;
             $eventdata->subject           = get_string("enrolmentnew", 'enrol', $shortname);
@@ -268,8 +268,8 @@ if (strlen($result) > 0) {
 
             $eventdata = new stdClass();
             $eventdata->modulename        = 'moodle';
-            $eventdata->component         = 'enrol_paypal';
-            $eventdata->name              = 'paypal_enrolment';
+            $eventdata->component         = 'enrol_paypalupgrade';
+            $eventdata->name              = 'paypalupgrade_enrolment';
             $eventdata->userfrom          = $user;
             $eventdata->userto            = $teacher;
             $eventdata->subject           = get_string("enrolmentnew", 'enrol', $shortname);
@@ -287,8 +287,8 @@ if (strlen($result) > 0) {
             foreach ($admins as $admin) {
                 $eventdata = new stdClass();
                 $eventdata->modulename        = 'moodle';
-                $eventdata->component         = 'enrol_paypal';
-                $eventdata->name              = 'paypal_enrolment';
+                $eventdata->component         = 'enrol_paypalupgrade';
+                $eventdata->name              = 'paypalupgrade_enrolment';
                 $eventdata->userfrom          = $user;
                 $eventdata->userto            = $admin;
                 $eventdata->subject           = get_string("enrolmentnew", 'enrol', $shortname);
@@ -301,8 +301,8 @@ if (strlen($result) > 0) {
         }
 
     } else if (strcmp ($result, "INVALID") == 0) { // ERROR
-        $DB->insert_record("enrol_paypal", $data, false);
-        message_paypal_error_to_admin("Received an invalid payment notification!! (Fake payment?)", $data);
+        $DB->insert_record("enrol_paypalupgrade", $data, false);
+        message_paypalupgrade_error_to_admin("Received an invalid payment notification!! (Fake payment?)", $data);
     }
 }
 
@@ -312,7 +312,7 @@ exit;
 //--- HELPER FUNCTIONS --------------------------------------------------------------------------------------
 
 
-function message_paypal_error_to_admin($subject, $data) {
+function message_paypalupgrade_error_to_admin($subject, $data) {
     echo $subject;
     $admin = get_admin();
     $site = get_site();
@@ -325,8 +325,8 @@ function message_paypal_error_to_admin($subject, $data) {
 
     $eventdata = new stdClass();
     $eventdata->modulename        = 'moodle';
-    $eventdata->component         = 'enrol_paypal';
-    $eventdata->name              = 'paypal_enrolment';
+    $eventdata->component         = 'enrol_paypalupgrade';
+    $eventdata->name              = 'paypalupgrade_enrolment';
     $eventdata->userfrom          = $admin;
     $eventdata->userto            = $admin;
     $eventdata->subject           = "PAYPAL ERROR: ".$subject;
@@ -343,10 +343,10 @@ function message_paypal_error_to_admin($subject, $data) {
  * @param Exception $ex
  * @return void - does not return. Terminates execution!
  */
-function enrol_paypal_ipn_exception_handler($ex) {
+function enrol_paypalupgrade_ipn_exception_handler($ex) {
     $info = get_exception_info($ex);
 
-    $logerrmsg = "enrol_paypal IPN exception handler: ".$info->message;
+    $logerrmsg = "enrol_paypalupgrade IPN exception handler: ".$info->message;
     if (debugging('', DEBUG_NORMAL)) {
         $logerrmsg .= ' Debug: '.$info->debuginfo."\n".format_backtrace($info->backtrace, true);
     }

@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Adds new instance of enrol_paypal to specified course
+ * Adds new instance of enrol_paypalupgrade to specified course
  * or edits current instance.
  *
- * @package    enrol_paypal
+ * @package    enrol_paypalupgrade
  * @copyright  2010 Petr Skoda  {@link http://skodak.org}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -33,20 +33,20 @@ $course = $DB->get_record('course', array('id'=>$courseid), '*', MUST_EXIST);
 $context = context_course::instance($course->id, MUST_EXIST);
 
 require_login($course);
-require_capability('enrol/paypal:config', $context);
+require_capability('enrol/paypalupgrade:config', $context);
 
-$PAGE->set_url('/enrol/paypal/edit.php', array('courseid'=>$course->id, 'id'=>$instanceid));
+$PAGE->set_url('/enrol/paypalupgrade/edit.php', array('courseid'=>$course->id, 'id'=>$instanceid));
 $PAGE->set_pagelayout('admin');
 
 $return = new moodle_url('/enrol/instances.php', array('id'=>$course->id));
-if (!enrol_is_enabled('paypal')) {
+if (!enrol_is_enabled('paypalupgrade')) {
     redirect($return);
 }
 
-$plugin = enrol_get_plugin('paypal');
+$plugin = enrol_get_plugin('paypalupgrade');
 
 if ($instanceid) {
-    $instance = $DB->get_record('enrol', array('courseid'=>$course->id, 'enrol'=>'paypal', 'id'=>$instanceid), '*', MUST_EXIST);
+    $instance = $DB->get_record('enrol', array('courseid'=>$course->id, 'enrol'=>'paypalupgrade', 'id'=>$instanceid), '*', MUST_EXIST);
     $instance->cost = format_float($instance->cost, 2, true);
 } else {
     require_capability('moodle/course:enrolconfig', $context);
@@ -57,7 +57,7 @@ if ($instanceid) {
     $instance->courseid = $course->id;
 }
 
-$mform = new enrol_paypal_edit_form(NULL, array($instance, $plugin, $context));
+$mform = new enrol_paypalupgrade_edit_form(NULL, array($instance, $plugin, $context));
 
 if ($mform->is_cancelled()) {
     redirect($return);
@@ -101,9 +101,9 @@ if ($mform->is_cancelled()) {
 }
 
 $PAGE->set_heading($course->fullname);
-$PAGE->set_title(get_string('pluginname', 'enrol_paypal'));
+$PAGE->set_title(get_string('pluginname', 'enrol_paypalupgrade'));
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading(get_string('pluginname', 'enrol_paypal'));
+echo $OUTPUT->heading(get_string('pluginname', 'enrol_paypalupgrade'));
 $mform->display();
 echo $OUTPUT->footer();
