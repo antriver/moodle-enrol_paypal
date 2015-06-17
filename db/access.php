@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Capabilities for paypalupgrade enrolment plugin.
+ * Capabilities for paypalenhanced enrolment plugin.
  *
- * @package    enrol_paypalupgrade
+ * @package    enrol_paypalenhanced
  * @copyright  2010 Petr Skoda {@link http://skodak.org}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -26,7 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $capabilities = array(
 
-    'enrol/paypalupgrade:config' => array(
+    'enrol/paypalenhanced:config' => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
         'archetypes' => array(
@@ -34,7 +34,7 @@ $capabilities = array(
         )
     ),
 
-    'enrol/paypalupgrade:manage' => array(
+    'enrol/paypalenhanced:manage' => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
         'archetypes' => array(
@@ -43,7 +43,7 @@ $capabilities = array(
         )
     ),
 
-    'enrol/paypalupgrade:unenrol' => array(
+    'enrol/paypalenhanced:unenrol' => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
         'archetypes' => array(
@@ -51,7 +51,7 @@ $capabilities = array(
         )
     ),
 
-    'enrol/paypalupgrade:unenrolself' => array(
+    'enrol/paypalenhanced:unenrolself' => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
         'archetypes' => array(

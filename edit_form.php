@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Adds new instance of enrol_paypalupgrade to specified course
+ * Adds new instance of enrol_paypalenhanced to specified course
  * or edits current instance.
  *
- * @package    enrol_paypalupgrade
+ * @package    enrol_paypalenhanced
  * @copyright  2010 Petr Skoda  {@link http://skodak.org}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -27,7 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir.'/formslib.php');
 
-class enrol_paypalupgrade_edit_form extends moodleform {
+class enrol_paypalenhanced_edit_form extends moodleform {
 
     function definition() {
         global $DB;
@@ -36,22 +36,22 @@ class enrol_paypalupgrade_edit_form extends moodleform {
 
         list($instance, $plugin, $context) = $this->_customdata;
 
-        $mform->addElement('header', 'header', get_string('pluginname', 'enrol_paypalupgrade'));
+        $mform->addElement('header', 'header', get_string('pluginname', 'enrol_paypalenhanced'));
 
         $mform->addElement('text', 'name', get_string('custominstancename', 'enrol'));
         $mform->setType('name', PARAM_TEXT);
 
         $options = array(ENROL_INSTANCE_ENABLED  => get_string('yes'),
                          ENROL_INSTANCE_DISABLED => get_string('no'));
-        $mform->addElement('select', 'status', get_string('status', 'enrol_paypalupgrade'), $options);
+        $mform->addElement('select', 'status', get_string('status', 'enrol_paypalenhanced'), $options);
         $mform->setDefault('status', $plugin->get_config('status'));
 
-        $mform->addElement('text', 'cost', get_string('cost', 'enrol_paypalupgrade'), array('size'=>4));
+        $mform->addElement('text', 'cost', get_string('cost', 'enrol_paypalenhanced'), array('size'=>4));
         $mform->setType('cost', PARAM_RAW); // Use unformat_float to get real value.
         $mform->setDefault('cost', format_float($plugin->get_config('cost'), 2, true));
 
         $paypalcurrencies = $plugin->get_currencies();
-        $mform->addElement('select', 'currency', get_string('currency', 'enrol_paypalupgrade'), $paypalcurrencies);
+        $mform->addElement('select', 'currency', get_string('currency', 'enrol_paypalenhanced'), $paypalcurrencies);
         $mform->setDefault('currency', $plugin->get_config('currency'));
 
         if ($instance->id) {
@@ -59,13 +59,13 @@ class enrol_paypalupgrade_edit_form extends moodleform {
         } else {
             $roles = get_default_enrol_roles($context, $plugin->get_config('roleid'));
         }
-        $mform->addElement('select', 'roleid', get_string('assignrole', 'enrol_paypalupgrade'), $roles);
+        $mform->addElement('select', 'roleid', get_string('assignrole', 'enrol_paypalenhanced'), $roles);
         $mform->setDefault('roleid', $plugin->get_config('roleid'));
 
 
-        $mform->addElement('duration', 'enrolperiod', get_string('enrolperiod', 'enrol_paypalupgrade'), array('optional' => true, 'defaultunit' => 86400));
+        $mform->addElement('duration', 'enrolperiod', get_string('enrolperiod', 'enrol_paypalenhanced'), array('optional' => true, 'defaultunit' => 86400));
         $mform->setDefault('enrolperiod', $plugin->get_config('enrolperiod'));
-        $mform->addHelpButton('enrolperiod', 'enrolperiod', 'enrol_paypalupgrade');
+        $mform->addHelpButton('enrolperiod', 'enrolperiod', 'enrol_paypalenhanced');
 
         // Load all courses to show in the selector
         $courses = $DB->get_records('course', null, 'fullname', 'id, fullname');
@@ -73,17 +73,17 @@ class enrol_paypalupgrade_edit_form extends moodleform {
         foreach ($courses as $course) {
             $courselist[$course->id] = $course->fullname;
         }
-        $mform->addElement('select', 'customint1', get_string('requiredcourse', 'enrol_paypalupgrade'), $courselist);
+        $mform->addElement('select', 'customint1', get_string('requiredcourse', 'enrol_paypalenhanced'), $courselist);
         $mform->setDefault('customint1', $plugin->get_config('requiredcourse'));
-        $mform->addHelpButton('customint1', 'requiredcourse', 'enrol_paypalupgrade');
+        $mform->addHelpButton('customint1', 'requiredcourse', 'enrol_paypalenhanced');
 
-        $mform->addElement('date_time_selector', 'enrolstartdate', get_string('enrolstartdate', 'enrol_paypalupgrade'), array('optional' => true));
+        $mform->addElement('date_time_selector', 'enrolstartdate', get_string('enrolstartdate', 'enrol_paypalenhanced'), array('optional' => true));
         $mform->setDefault('enrolstartdate', 0);
-        $mform->addHelpButton('enrolstartdate', 'enrolstartdate', 'enrol_paypalupgrade');
+        $mform->addHelpButton('enrolstartdate', 'enrolstartdate', 'enrol_paypalenhanced');
 
-        $mform->addElement('date_time_selector', 'enrolenddate', get_string('enrolenddate', 'enrol_paypalupgrade'), array('optional' => true));
+        $mform->addElement('date_time_selector', 'enrolenddate', get_string('enrolenddate', 'enrol_paypalenhanced'), array('optional' => true));
         $mform->setDefault('enrolenddate', 0);
-        $mform->addHelpButton('enrolenddate', 'enrolenddate', 'enrol_paypalupgrade');
+        $mform->addHelpButton('enrolenddate', 'enrolenddate', 'enrol_paypalenhanced');
 
         $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
@@ -107,12 +107,12 @@ class enrol_paypalupgrade_edit_form extends moodleform {
         list($instance, $plugin, $context) = $this->_customdata;
 
         if (!empty($data['enrolenddate']) and $data['enrolenddate'] < $data['enrolstartdate']) {
-            $errors['enrolenddate'] = get_string('enrolenddaterror', 'enrol_paypalupgrade');
+            $errors['enrolenddate'] = get_string('enrolenddaterror', 'enrol_paypalenhanced');
         }
 
         $cost = str_replace(get_string('decsep', 'langconfig'), '.', $data['cost']);
         if (!is_numeric($cost)) {
-            $errors['cost'] = get_string('costerror', 'enrol_paypalupgrade');
+            $errors['cost'] = get_string('costerror', 'enrol_paypalenhanced');
         }
 
         return $errors;

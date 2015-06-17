@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file keeps track of upgrades to the paypalupgrade enrolment plugin
+ * This file keeps track of upgrades to the paypalenhanced enrolment plugin
  *
- * @package    enrol_paypalupgrade
+ * @package    enrol_paypalenhanced
  * @copyright  2010 Eugene Venter
  * @author     Eugene Venter
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -40,7 +40,7 @@
 // Please do not forget to use upgrade_set_timeout()
 // before any action that may take longer time to finish.
 
-function xmldb_enrol_paypalupgrade_upgrade($oldversion) {
+function xmldb_enrol_paypalenhanced_upgrade($oldversion) {
     global $CFG, $DB;
 
     $dbman = $DB->get_manager();

@@ -22,7 +22,7 @@
  *   - you need to change the "www-data" to match the apache user account
  *   - use "su" if "sudo" not available
  *
- * @package    enrol_paypalupgrade
+ * @package    enrol_paypalenhanced
  * @copyright  2012 Petr Skoda {@link http://skodak.org}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -49,15 +49,15 @@ Options:
 -h, --help            Print out this help
 
 Example:
-\$ sudo -u www-data /usr/bin/php enrol/paypalupgrade/cli/sync.php
+\$ sudo -u www-data /usr/bin/php enrol/paypalenhanced/cli/sync.php
 ";
 
     echo $help;
     die;
 }
 
-if (!enrol_is_enabled('paypalupgrade')) {
-    echo('enrol_paypalupgrade plugin is disabled'."\n");
+if (!enrol_is_enabled('paypalenhanced')) {
+    echo('enrol_paypalenhanced plugin is disabled'."\n");
     exit(2);
 }
 
@@ -67,8 +67,8 @@ if (empty($options['verbose'])) {
     $trace = new text_progress_trace();
 }
 
-/** @var $plugin enrol_paypalupgrade_plugin */
-$plugin = enrol_get_plugin('paypalupgrade');
+/** @var $plugin enrol_paypalenhanced_plugin */
+$plugin = enrol_get_plugin('paypalenhanced');
 
 $result = $plugin->sync($trace);
 

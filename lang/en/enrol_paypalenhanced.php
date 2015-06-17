@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'enrol_paypalupgrade', language 'en'.
+ * Strings for component 'enrol_paypalenhanced', language 'en'.
  *
- * @package    enrol_paypalupgrade
+ * @package    enrol_paypalenhanced
  * @copyright  1999 onwards Martin Dougiamas  {@link http://moodle.com}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -44,12 +44,12 @@ $string['expiredaction_help'] = 'Select action to carry out when user enrolment 
 $string['mailadmins'] = 'Notify admin';
 $string['mailstudents'] = 'Notify students';
 $string['mailteachers'] = 'Notify teachers';
-$string['messageprovider:paypalupgrade_enrolment'] = 'PayPal enrolment messages';
+$string['messageprovider:paypalenhanced_enrolment'] = 'PayPal enrolment messages';
 $string['nocost'] = 'There is no cost associated with enrolling in this course!';
-$string['paypalupgrade:config'] = 'Configure PayPal enrol instances';
-$string['paypalupgrade:manage'] = 'Manage enrolled users';
-$string['paypalupgrade:unenrol'] = 'Unenrol users from course';
-$string['paypalupgrade:unenrolself'] = 'Unenrol self from the course';
+$string['paypalenhanced:config'] = 'Configure PayPal enrol instances';
+$string['paypalenhanced:manage'] = 'Manage enrolled users';
+$string['paypalenhanced:unenrol'] = 'Unenrol users from course';
+$string['paypalenhanced:unenrolself'] = 'Unenrol self from the course';
 $string['paypalaccepted'] = 'PayPal payments accepted';
 $string['pluginname'] = 'PayPal Enhanced';
 $string['pluginname_desc'] = 'The PayPal module allows you to set up paid courses.  If the cost for any course is zero, then students are not asked to pay for entry.  There is a site-wide cost that you set here as a default for the whole site and then a course setting that you can set for each course individually. The course cost overrides the site cost.';
