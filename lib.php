@@ -184,7 +184,6 @@ class enrol_paypalenhanced_plugin extends enrol_plugin {
             foreach ($prerequisitecourses as $prerequisitecourseid) {
                 $prerequisitecontext = context_course::instance($prerequisitecourseid);
                 if (!is_enrolled($prerequisitecontext, $USER, '', true)) {
-                    echo 'not enroled in prerequisite course';
                     return ob_get_clean();
                 }
             }
@@ -196,7 +195,6 @@ class enrol_paypalenhanced_plugin extends enrol_plugin {
             foreach ($conflictingcourses as $conflictingcourseid) {
                 $conflictingcontext = context_course::instance($conflictingcourseid);
                 if (is_enrolled($conflictingcontext, $USER, '', true)) {
-                    echo 'enroled in conflicting course';
                     return ob_get_clean();
                 }
             }
