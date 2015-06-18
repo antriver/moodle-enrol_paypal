@@ -27,7 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 
 if ($ADMIN->fulltree) {
 
-    //--- settings ------------------------------------------------------------------------------------------
+    // --- settings ------------------------------------------------------------------------------------------
     $settings->add(new admin_setting_heading('enrol_paypalenhanced_settings', '', get_string('pluginname_desc', 'enrol_paypalenhanced')));
 
     $settings->add(new admin_setting_configtext('enrol_paypalenhanced/paypalbusiness', get_string('businessemail', 'enrol_paypalenhanced'), get_string('businessemail_desc', 'enrol_paypalenhanced'), '', PARAM_EMAIL));
@@ -47,7 +47,7 @@ if ($ADMIN->fulltree) {
     );
     $settings->add(new admin_setting_configselect('enrol_paypalenhanced/expiredaction', get_string('expiredaction', 'enrol_paypalenhanced'), get_string('expiredaction_help', 'enrol_paypalenhanced'), ENROL_EXT_REMOVED_SUSPENDNOROLES, $options));
 
-    //--- enrol instance defaults ----------------------------------------------------------------------------
+    // --- enrol instance defaults ----------------------------------------------------------------------------
     $settings->add(new admin_setting_heading('enrol_paypalenhanced_defaults',
         get_string('enrolinstancedefaults', 'admin'), get_string('enrolinstancedefaults_desc', 'admin')));
 
@@ -88,7 +88,7 @@ if ($ADMIN->fulltree) {
         $settings->add(new admin_setting_configmultiselect('enrol_paypalenhanced/conflictingcourses', get_string('conflictingcourses', 'enrol_paypalenhanced'), get_string('conflictingcourses_desc', 'enrol_paypalenhanced'), array(), $courselist));
 
         // Bundled courses
-        //$settings->add(new admin_setting_configmultiselect('enrol_paypalenhanced/bundledcourses', get_string('bundledcourses', 'enrol_paypalenhanced'), get_string('bundledcourses_desc', 'enrol_paypalenhanced'), array(), $courselist));
+        // $settings->add(new admin_setting_configmultiselect('enrol_paypalenhanced/bundledcourses', get_string('bundledcourses', 'enrol_paypalenhanced'), get_string('bundledcourses_desc', 'enrol_paypalenhanced'), array(), $courselist));
 
     }
 

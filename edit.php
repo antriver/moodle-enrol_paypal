@@ -29,16 +29,16 @@ require_once('edit_form.php');
 $courseid   = required_param('courseid', PARAM_INT);
 $instanceid = optional_param('id', 0, PARAM_INT); // instanceid
 
-$course = $DB->get_record('course', array('id'=>$courseid), '*', MUST_EXIST);
+$course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
 $context = context_course::instance($course->id, MUST_EXIST);
 
 require_login($course);
 require_capability('enrol/paypalenhanced:config', $context);
 
-$PAGE->set_url('/enrol/paypalenhanced/edit.php', array('courseid'=>$course->id, 'id'=>$instanceid));
+$PAGE->set_url('/enrol/paypalenhanced/edit.php', array('courseid' => $course->id, 'id' => $instanceid));
 $PAGE->set_pagelayout('admin');
 
-$return = new moodle_url('/enrol/instances.php', array('id'=>$course->id));
+$return = new moodle_url('/enrol/instances.php', array('id' => $course->id));
 if (!enrol_is_enabled('paypalenhanced')) {
     redirect($return);
 }
@@ -46,18 +46,18 @@ if (!enrol_is_enabled('paypalenhanced')) {
 $plugin = enrol_get_plugin('paypalenhanced');
 
 if ($instanceid) {
-    $instance = $DB->get_record('enrol', array('courseid'=>$course->id, 'enrol'=>'paypalenhanced', 'id'=>$instanceid), '*', MUST_EXIST);
+    $instance = $DB->get_record('enrol', array('courseid' => $course->id, 'enrol' => 'paypalenhanced', 'id' => $instanceid), '*', MUST_EXIST);
     $instance->cost = format_float($instance->cost, 2, true);
 } else {
     require_capability('moodle/course:enrolconfig', $context);
     // no instance yet, we have to add new instance
-    navigation_node::override_active_url(new moodle_url('/enrol/instances.php', array('id'=>$course->id)));
+    navigation_node::override_active_url(new moodle_url('/enrol/instances.php', array('id' => $course->id)));
     $instance = new stdClass();
     $instance->id       = null;
     $instance->courseid = $course->id;
 }
 
-$mform = new enrol_paypalenhanced_edit_form(NULL, array($instance, $plugin, $context));
+$mform = new enrol_paypalenhanced_edit_form(null, array($instance, $plugin, $context));
 
 if ($mform->is_cancelled()) {
     redirect($return);
@@ -66,7 +66,7 @@ if ($mform->is_cancelled()) {
 
     $data->customtext1 = implode(',', $data->customtext1);
     $data->customtext2 = implode(',', $data->customtext2);
-    //$data->customtext3 = implode(',', $data->customtext3);
+    // $data->customtext3 = implode(',', $data->customtext3);
 
     if ($instance->id) {
         $reset = ($instance->status != $data->status);
@@ -82,7 +82,7 @@ if ($mform->is_cancelled()) {
         $instance->timemodified   = time();
         $instance->customtext1     = $data->customtext1;
         $instance->customtext2     = $data->customtext2;
-        //$instance->customtext3     = $data->customtext3;
+        // $instance->customtext3     = $data->customtext3;
         $DB->update_record('enrol', $instance);
 
         if ($reset) {
@@ -101,7 +101,7 @@ if ($mform->is_cancelled()) {
             'enrolenddate'   => $data->enrolenddate,
             'customtext1'     => $data->customtext1,
             'customtext2'     => $data->customtext2,
-            //'customtext3'     => $data->customtext3
+            // 'customtext3'     => $data->customtext3
         );
         $plugin->add_instance($course, $fields);
     }

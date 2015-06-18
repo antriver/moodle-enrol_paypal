@@ -27,7 +27,7 @@ require_once("$CFG->dirroot/enrol/paypalenhanced/lib.php");
 
 $id = required_param('id', PARAM_INT);
 
-if (!$course = $DB->get_record("course", array("id"=>$id))) {
+if (!$course = $DB->get_record("course", array("id" => $id))) {
     redirect($CFG->wwwroot);
 }
 
@@ -45,10 +45,10 @@ if (!empty($SESSION->wantsurl)) {
 
 $fullname = format_string($course->fullname, true, array('context' => $context));
 
-if (is_enrolled($context, NULL, '', true)) { // TODO: use real paypal check
+if (is_enrolled($context, null, '', true)) { // TODO: use real paypal check
     redirect($destination, get_string('paymentthanks', '', $fullname));
 
-} else {   /// Somehow they aren't enrolled yet!  :-(
+} else {   // Somehow they aren't enrolled yet!  :-(
     $PAGE->set_url($destination);
     echo $OUTPUT->header();
     $a = new stdClass();

@@ -109,7 +109,7 @@ class enrol_paypalenhanced_plugin extends enrol_plugin {
 
         $context = context_course::instance($instance->courseid);
         if (has_capability('enrol/paypalenhanced:config', $context)) {
-            $managelink = new moodle_url('/enrol/paypalenhanced/edit.php', array('courseid'=>$instance->courseid, 'id'=>$instance->id));
+            $managelink = new moodle_url('/enrol/paypalenhanced/edit.php', array('courseid' => $instance->courseid, 'id' => $instance->id));
             $instancesnode->add($this->get_instance_name($instance), $managelink, navigation_node::TYPE_SETTING);
         }
     }
@@ -130,7 +130,7 @@ class enrol_paypalenhanced_plugin extends enrol_plugin {
         $icons = array();
 
         if (has_capability('enrol/paypalenhanced:config', $context)) {
-            $editlink = new moodle_url("/enrol/paypalenhanced/edit.php", array('courseid'=>$instance->courseid, 'id'=>$instance->id));
+            $editlink = new moodle_url("/enrol/paypalenhanced/edit.php", array('courseid' => $instance->courseid, 'id' => $instance->id));
             $icons[] = $OUTPUT->action_icon($editlink, new pix_icon('t/edit', get_string('edit'), 'core',
                     array('class' => 'iconsmall')));
         }
@@ -147,11 +147,11 @@ class enrol_paypalenhanced_plugin extends enrol_plugin {
         $context = context_course::instance($courseid, MUST_EXIST);
 
         if (!has_capability('moodle/course:enrolconfig', $context) or !has_capability('enrol/paypalenhanced:config', $context)) {
-            return NULL;
+            return null;
         }
 
         // multiple instances supported - different cost for different roles
-        return new moodle_url('/enrol/paypalenhanced/edit.php', array('courseid'=>$courseid));
+        return new moodle_url('/enrol/paypalenhanced/edit.php', array('courseid' => $courseid));
     }
 
     /**
@@ -161,12 +161,12 @@ class enrol_paypalenhanced_plugin extends enrol_plugin {
      * @param stdClass $instance
      * @return string html text, usually a form in a text box
      */
-    function enrol_page_hook(stdClass $instance) {
+    public function enrol_page_hook(stdClass $instance) {
         global $CFG, $USER, $OUTPUT, $PAGE, $DB;
 
         ob_start();
 
-        if ($DB->record_exists('user_enrolments', array('userid'=>$USER->id, 'enrolid'=>$instance->id))) {
+        if ($DB->record_exists('user_enrolments', array('userid' => $USER->id, 'enrolid' => $instance->id))) {
             return ob_get_clean();
         }
 
@@ -202,7 +202,7 @@ class enrol_paypalenhanced_plugin extends enrol_plugin {
             }
         }
 
-        $course = $DB->get_record('course', array('id'=>$instance->courseid));
+        $course = $DB->get_record('course', array('id' => $instance->courseid));
         $context = context_course::instance($course->id);
 
         $shortname = format_string($course->shortname, true, array('context' => $context));
@@ -246,8 +246,8 @@ class enrol_paypalenhanced_plugin extends enrol_plugin {
                 echo '<p><a href="'.$wwwroot.'/login/">'.get_string('loginsite').'</a></p>';
                 echo '</div>';
             } else {
-                //Sanitise some fields before building the PayPal form
-                $coursefullname  = format_string($course->fullname, true, array('context'=>$context));
+                // Sanitise some fields before building the PayPal form
+                $coursefullname  = format_string($course->fullname, true, array('context' => $context));
                 $courseshortname = $shortname;
                 $userfullname    = fullname($USER);
                 $userfirstname   = $USER->firstname;
@@ -322,11 +322,11 @@ class enrol_paypalenhanced_plugin extends enrol_plugin {
         $params['ue'] = $ue->id;
         if ($this->allow_unenrol($instance) && has_capability("enrol/paypalenhanced:unenrol", $context)) {
             $url = new moodle_url('/enrol/unenroluser.php', $params);
-            $actions[] = new user_enrolment_action(new pix_icon('t/delete', ''), get_string('unenrol', 'enrol'), $url, array('class'=>'unenrollink', 'rel'=>$ue->id));
+            $actions[] = new user_enrolment_action(new pix_icon('t/delete', ''), get_string('unenrol', 'enrol'), $url, array('class' => 'unenrollink', 'rel' => $ue->id));
         }
         if ($this->allow_manage($instance) && has_capability("enrol/paypalenhanced:manage", $context)) {
             $url = new moodle_url('/enrol/editenrolment.php', $params);
-            $actions[] = new user_enrolment_action(new pix_icon('t/edit', ''), get_string('edit'), $url, array('class'=>'editenrollink', 'rel'=>$ue->id));
+            $actions[] = new user_enrolment_action(new pix_icon('t/edit', ''), get_string('edit'), $url, array('class' => 'editenrollink', 'rel' => $ue->id));
         }
         return $actions;
     }

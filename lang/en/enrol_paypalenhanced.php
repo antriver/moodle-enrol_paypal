@@ -23,9 +23,9 @@
  */
 
 $string['assignrole'] = 'Assign role';
-//$string['bundledcourses'] = 'Bundled courses';
-//$string['bundledcourses_desc'] = 'Default course(s) that the user will also be enroled in when enroling with this method.';
-//$string['bundledcourses_help'] = 'Other courses the user will be enroled in when enroling with this method. Leave blank to disable.';
+// $string['bundledcourses'] = 'Bundled courses';
+// $string['bundledcourses_desc'] = 'Default course(s) that the user will also be enroled in when enroling with this method.';
+// $string['bundledcourses_help'] = 'Other courses the user will be enroled in when enroling with this method. Leave blank to disable.';
 $string['businessemail'] = 'PayPal business email';
 $string['businessemail_desc'] = 'The email address of your business PayPal account';
 $string['conflictingcourses'] = 'Conflicting courses';

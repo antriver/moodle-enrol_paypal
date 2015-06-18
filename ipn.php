@@ -42,15 +42,15 @@ require_once($CFG->libdir . '/filelib.php');
 // the custom handler just logs exceptions and stops.
 set_exception_handler('enrol_paypalenhanced_ipn_exception_handler');
 
-/// Keep out casual intruders
+// Keep out casual intruders
 if (empty($_POST) or !empty($_GET)) {
     print_error("Sorry, you can not use the script that way.");
 }
 
-/// Read all the data from PayPal and get it ready for later;
-/// we expect only valid UTF-8 encoding, it is the responsibility
-/// of user to set it up properly in PayPal business account,
-/// it is documented in docs wiki.
+// Read all the data from PayPal and get it ready for later;
+// we expect only valid UTF-8 encoding, it is the responsibility
+// of user to set it up properly in PayPal business account,
+// it is documented in docs wiki.
 
 $req = 'cmd=_notify-validate';
 
@@ -70,14 +70,14 @@ $data->payment_currency = $data->mc_currency;
 $data->timeupdated      = time();
 
 
-/// get the user and course records
+// get the user and course records
 
-if (! $user = $DB->get_record("user", array("id"=>$data->userid))) {
+if (! $user = $DB->get_record("user", array("id" => $data->userid))) {
     message_paypalenhanced_error_to_admin("Not a valid user id", $data);
     die;
 }
 
-if (! $course = $DB->get_record("course", array("id"=>$data->courseid))) {
+if (! $course = $DB->get_record("course", array("id" => $data->courseid))) {
     message_paypalenhanced_error_to_admin("Not a valid course id", $data);
     die;
 }
@@ -87,14 +87,14 @@ if (! $context = context_course::instance($course->id, IGNORE_MISSING)) {
     die;
 }
 
-if (! $plugin_instance = $DB->get_record("enrol", array("id"=>$data->instanceid, "status"=>0))) {
+if (! $plugininstance = $DB->get_record("enrol", array("id" => $data->instanceid, "status" => 0))) {
     message_paypalenhanced_error_to_admin("Not a valid instance id", $data);
     die;
 }
 
 $plugin = enrol_get_plugin('paypalenhanced');
 
-/// Open a connection back to PayPal to validate the data
+// Open a connection back to PayPal to validate the data
 $paypaladdr = empty($CFG->usepaypalsandbox) ? 'www.paypal.com' : 'www.sandbox.paypal.com';
 $c = new curl();
 $options = array(
@@ -106,15 +106,15 @@ $options = array(
 $location = "https://$paypaladdr/cgi-bin/webscr";
 $result = $c->post($location, $req, $options);
 
-if (!$result) {  /// Could not connect to PayPal - FAIL
+if (!$result) {  // Could not connect to PayPal - FAIL
     echo "<p>Error: could not access paypal.com</p>";
     message_paypalenhanced_error_to_admin("Could not access paypal.com to verify payment", $data);
     die;
 }
 
-/// Connection is OK, so now we post the data to validate it
+// Connection is OK, so now we post the data to validate it
 
-/// Now read the response and check if everything is OK.
+// Now read the response and check if everything is OK.
 
 if (strlen($result) > 0) {
     if (strcmp($result, "VERIFIED") == 0) {          // VALID PAYMENT!
@@ -126,14 +126,14 @@ if (strlen($result) > 0) {
         // and notify admin
 
         if ($data->payment_status != "Completed" and $data->payment_status != "Pending") {
-            $plugin->unenrol_user($plugin_instance, $data->userid);
+            $plugin->unenrol_user($plugininstance, $data->userid);
             message_paypalenhanced_error_to_admin("Status not completed or pending. User unenrolled from course", $data);
             die;
         }
 
         // If currency is incorrectly set then someone maybe trying to cheat the system
 
-        if ($data->mc_currency != $plugin_instance->currency) {
+        if ($data->mc_currency != $plugininstance->currency) {
             message_paypalenhanced_error_to_admin("Currency does not match course settings, received: ".$data->mc_currency, $data);
             die;
         }
@@ -171,7 +171,7 @@ if (strlen($result) > 0) {
 
 
 
-        if ($existing = $DB->get_record("enrol_paypalenhanced", array("txn_id"=>$data->txn_id))) {   // Make sure this transaction doesn't exist already
+        if ($existing = $DB->get_record("enrol_paypalenhanced", array("txn_id" => $data->txn_id))) {   // Make sure this transaction doesn't exist already
             message_paypalenhanced_error_to_admin("Transaction $data->txn_id is being repeated!", $data);
             die;
 
@@ -184,12 +184,12 @@ if (strlen($result) > 0) {
 
         }
 
-        if (!$user = $DB->get_record('user', array('id'=>$data->userid))) {   // Check that user exists
+        if (!$user = $DB->get_record('user', array('id' => $data->userid))) {   // Check that user exists
             message_paypalenhanced_error_to_admin("User $data->userid doesn't exist", $data);
             die;
         }
 
-        if (!$course = $DB->get_record('course', array('id'=>$data->courseid))) { // Check that course exists
+        if (!$course = $DB->get_record('course', array('id' => $data->courseid))) { // Check that course exists
             message_paypalenhanced_error_to_admin("Course $data->courseid doesn't exist", $data);
             die;
         }
@@ -197,10 +197,10 @@ if (strlen($result) > 0) {
         $coursecontext = context_course::instance($course->id, IGNORE_MISSING);
 
         // Check that amount paid is the correct amount
-        if ( (float) $plugin_instance->cost <= 0 ) {
+        if ( (float) $plugininstance->cost <= 0 ) {
             $cost = (float) $plugin->get_config('cost');
         } else {
-            $cost = (float) $plugin_instance->cost;
+            $cost = (float) $plugininstance->cost;
         }
 
         // Use the same rounding of floats as on the enrol form.
@@ -216,16 +216,16 @@ if (strlen($result) > 0) {
 
         $DB->insert_record("enrol_paypalenhanced", $data);
 
-        if ($plugin_instance->enrolperiod) {
+        if ($plugininstance->enrolperiod) {
             $timestart = time();
-            $timeend   = $timestart + $plugin_instance->enrolperiod;
+            $timeend   = $timestart + $plugininstance->enrolperiod;
         } else {
             $timestart = 0;
             $timeend   = 0;
         }
 
         // Enrol user
-        $plugin->enrol_user($plugin_instance, $user->id, $plugin_instance->roleid, $timestart, $timeend);
+        $plugin->enrol_user($plugininstance, $user->id, $plugininstance->roleid, $timestart, $timeend);
 
         // Pass $view=true to filter hidden caps if the user cannot see them
         if ($users = get_users_by_capability($context, 'moodle/course:update', 'u.*', 'u.id ASC',
@@ -309,7 +309,7 @@ if (strlen($result) > 0) {
 exit;
 
 
-//--- HELPER FUNCTIONS --------------------------------------------------------------------------------------
+// --- HELPER FUNCTIONS --------------------------------------------------------------------------------------
 
 
 function message_paypalenhanced_error_to_admin($subject, $data) {
