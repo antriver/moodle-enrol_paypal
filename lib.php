@@ -178,11 +178,27 @@ class enrol_paypalenhanced_plugin extends enrol_plugin {
             return ob_get_clean();
         }
 
-        // Hide this enrolment method if there's a prerequisite course and the user isn't enroled in it
-        if (!empty($instance->customint1)) {
-            $requiredcontext = context_course::instance($instance->customint1);
-            if (!is_enrolled($requiredcontext, $USER, '', true)) {
-                return ob_get_clean();
+        // Hide this enrolment method if there are prerequisite courses the user is NOT enroled in
+        if (!empty($instance->customtext1)) {
+            $prerequisitecourses = explode(',', $instance->customtext1);
+            foreach ($prerequisitecourses as $prerequisitecourseid) {
+                $prerequisitecontext = context_course::instance($prerequisitecourseid);
+                if (!is_enrolled($prerequisitecontext, $USER, '', true)) {
+                    echo 'not enroled in prerequisite course';
+                    return ob_get_clean();
+                }
+            }
+        }
+
+        // Hide this enrolment method if there are conflicting courses the user IS enroled in
+        if (!empty($instance->customtext2)) {
+            $conflictingcourses = explode(',', $instance->customtext2);
+            foreach ($conflictingcourses as $conflictingcourseid) {
+                $conflictingcontext = context_course::instance($conflictingcourseid);
+                if (is_enrolled($conflictingcontext, $USER, '', true)) {
+                    echo 'enroled in conflicting course';
+                    return ob_get_clean();
+                }
             }
         }
 

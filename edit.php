@@ -63,6 +63,11 @@ if ($mform->is_cancelled()) {
     redirect($return);
 
 } else if ($data = $mform->get_data()) {
+
+    $data->customtext1 = implode(',', $data->customtext1);
+    $data->customtext2 = implode(',', $data->customtext2);
+    //$data->customtext3 = implode(',', $data->customtext3);
+
     if ($instance->id) {
         $reset = ($instance->status != $data->status);
 
@@ -75,7 +80,9 @@ if ($mform->is_cancelled()) {
         $instance->enrolstartdate = $data->enrolstartdate;
         $instance->enrolenddate   = $data->enrolenddate;
         $instance->timemodified   = time();
-        $instance->customint1     = $data->customint1;
+        $instance->customtext1     = $data->customtext1;
+        $instance->customtext2     = $data->customtext2;
+        //$instance->customtext3     = $data->customtext3;
         $DB->update_record('enrol', $instance);
 
         if ($reset) {
@@ -92,7 +99,9 @@ if ($mform->is_cancelled()) {
             'enrolperiod'    => $data->enrolperiod,
             'enrolstartdate' => $data->enrolstartdate,
             'enrolenddate'   => $data->enrolenddate,
-            'customint1'     => $data->customint1
+            'customtext1'     => $data->customtext1,
+            'customtext2'     => $data->customtext2,
+            //'customtext3'     => $data->customtext3
         );
         $plugin->add_instance($course, $fields);
     }

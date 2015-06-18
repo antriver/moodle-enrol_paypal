@@ -67,15 +67,32 @@ class enrol_paypalenhanced_edit_form extends moodleform {
         $mform->setDefault('enrolperiod', $plugin->get_config('enrolperiod'));
         $mform->addHelpButton('enrolperiod', 'enrolperiod', 'enrol_paypalenhanced');
 
-        // Load all courses to show in the selector
+        // Load all courses to show in the course selectors
         $courses = $DB->get_records('course', null, 'fullname', 'id, fullname');
         $courselist = array(0 => '');
         foreach ($courses as $course) {
-            $courselist[$course->id] = $course->fullname;
+            if ($course->id != $instance->courseid) {
+                $courselist[$course->id] = $course->fullname;
+            }
         }
-        $mform->addElement('select', 'customint1', get_string('requiredcourse', 'enrol_paypalenhanced'), $courselist);
-        $mform->setDefault('customint1', $plugin->get_config('requiredcourse'));
-        $mform->addHelpButton('customint1', 'requiredcourse', 'enrol_paypalenhanced');
+
+        // Prerequisite courses
+        $prerequisitecoursesselect = $mform->addElement('select', 'customtext1', get_string('prerequisitecourses', 'enrol_paypalenhanced'), $courselist);
+        $prerequisitecoursesselect->setMultiple(true);
+        $mform->setDefault('customtext1', $plugin->get_config('prerequisitecourses'));
+        $mform->addHelpButton('customtext1', 'prerequisitecourses', 'enrol_paypalenhanced');
+
+        // Conflicting courses
+        $conflictingcoursesselect = $mform->addElement('select', 'customtext2', get_string('conflictingcourses', 'enrol_paypalenhanced'), $courselist);
+        $conflictingcoursesselect->setMultiple(true);
+        $mform->setDefault('customtext2', $plugin->get_config('conflictingcourses'));
+        $mform->addHelpButton('customtext2', 'conflictingcourses', 'enrol_paypalenhanced');
+
+        // Bundled courses
+        //$bundledcoursesselect = $mform->addElement('select', 'customtext3', get_string('bundledcourses', 'enrol_paypalenhanced'), $courselist);
+        //$bundledcoursesselect->setMultiple(true);
+        //$mform->setDefault('customtext3', $plugin->get_config('bundledcourses'));
+        //$mform->addHelpButton('customtext3', 'bundledcourses', 'enrol_paypalenhanced');
 
         $mform->addElement('date_time_selector', 'enrolstartdate', get_string('enrolstartdate', 'enrol_paypalenhanced'), array('optional' => true));
         $mform->setDefault('enrolstartdate', 0);

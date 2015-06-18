@@ -23,8 +23,14 @@
  */
 
 $string['assignrole'] = 'Assign role';
+//$string['bundledcourses'] = 'Bundled courses';
+//$string['bundledcourses_desc'] = 'Default course(s) that the user will also be enroled in when enroling with this method.';
+//$string['bundledcourses_help'] = 'Other courses the user will be enroled in when enroling with this method. Leave blank to disable.';
 $string['businessemail'] = 'PayPal business email';
 $string['businessemail_desc'] = 'The email address of your business PayPal account';
+$string['conflictingcourses'] = 'Conflicting courses';
+$string['conflictingcourses_desc'] = 'Default course(s) that will make the enrolment method hidden if the user is enroled in.';
+$string['conflictingcourses_help'] = 'Only offer this enrolment method if the user is NOT enroled in these courses. Leave blank to disable this check.';
 $string['cost'] = 'Enrol cost';
 $string['costerror'] = 'The enrolment cost is not numeric';
 $string['costorkey'] = 'Please choose one of the following methods of enrolment.';
@@ -53,9 +59,9 @@ $string['paypalenhanced:unenrolself'] = 'Unenrol self from the course';
 $string['paypalaccepted'] = 'PayPal payments accepted';
 $string['pluginname'] = 'PayPal Enhanced';
 $string['pluginname_desc'] = 'The PayPal module allows you to set up paid courses.  If the cost for any course is zero, then students are not asked to pay for entry.  There is a site-wide cost that you set here as a default for the whole site and then a course setting that you can set for each course individually. The course cost overrides the site cost.';
-$string['requiredcourse'] = 'Prerequisite course';
-$string['requiredcourse_desc'] = 'Default course that the user must be enroled in for the enrolment method to be offered. Leave blank to disable this requirement by default.';
-$string['requiredcourse_help'] = 'Only offer this enrolment method if the user is enroled into this course. Leave blank to disable this requirement.';
+$string['prerequisitecourses'] = 'Prerequisite courses';
+$string['prerequisitecourses_desc'] = 'Default course(s) that the user must be enroled in for the enrolment method to be offered.';
+$string['prerequisitecourses_help'] = 'Only offer this enrolment method if the user is enroled in these courses. Leave blank to disable this requirement.';
 $string['sendpaymentbutton'] = 'Send payment via PayPal';
 $string['status'] = 'Allow PayPal enrolments';
 $string['status_desc'] = 'Allow users to use PayPal to enrol into a course by default.';

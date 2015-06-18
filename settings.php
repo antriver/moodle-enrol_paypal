@@ -73,13 +73,23 @@ if ($ADMIN->fulltree) {
         get_string('enrolperiod', 'enrol_paypalenhanced'), get_string('enrolperiod_desc', 'enrol_paypalenhanced'), 0));
 
     if (!during_initial_install()) {
-        // Load all courses to show in the selector
+
+        // Load all courses to show in the selectors
         $courses = $DB->get_records('course', null, 'fullname', 'id, fullname');
         $courselist = array(0 => '');
         foreach ($courses as $course) {
             $courselist[$course->id] = $course->fullname;
         }
-        $settings->add(new admin_setting_configselect('enrol_paypalenhanced/requiredcourse', get_string('requiredcourse', 'enrol_paypalenhanced'), get_string('requiredcourse_desc', 'enrol_paypalenhanced'), 0, $courselist));
+
+        // Prerequisite courses
+        $settings->add(new admin_setting_configmultiselect('enrol_paypalenhanced/prerequisitecourses', get_string('prerequisitecourses', 'enrol_paypalenhanced'), get_string('prerequisitecourses_desc', 'enrol_paypalenhanced'), array(), $courselist));
+
+        // Conflicting courses
+        $settings->add(new admin_setting_configmultiselect('enrol_paypalenhanced/conflictingcourses', get_string('conflictingcourses', 'enrol_paypalenhanced'), get_string('conflictingcourses_desc', 'enrol_paypalenhanced'), array(), $courselist));
+
+        // Bundled courses
+        //$settings->add(new admin_setting_configmultiselect('enrol_paypalenhanced/bundledcourses', get_string('bundledcourses', 'enrol_paypalenhanced'), get_string('bundledcourses_desc', 'enrol_paypalenhanced'), array(), $courselist));
+
     }
 
 }
