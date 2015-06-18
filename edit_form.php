@@ -19,7 +19,7 @@
  * or edits current instance.
  *
  * @package    enrol_paypalenhanced
- * @copyright  2010 Petr Skoda  {@link http://skodak.org}
+ * @copyright  2015 Anthony Kuske <www.anthonykuske.com> 2010 Petr Skoda  {@link http://skodak.org}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

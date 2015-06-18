@@ -18,7 +18,7 @@
  * Paypal enrolment plugin version specification.
  *
  * @package    enrol_paypalenhanced
- * @copyright  2010 Eugene Venter
+ * @copyright  2015 Anthony Kuske <www.anthonykuske.com> 2010 Eugene Venter
  * @author     Eugene Venter
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -29,3 +29,4 @@ $plugin->version   = 2015061801;        // The current plugin version (Date: YYY
 $plugin->requires  = 2015050500;        // Requires this Moodle version
 $plugin->component = 'enrol_paypalenhanced';    // Full name of the plugin (used for diagnostics)
 $plugin->cron      = 60;
+$plugin->maturity  = MATURITY_STABLE;

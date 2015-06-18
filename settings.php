@@ -18,7 +18,7 @@
  * Paypal enrolments plugin settings and presets.
  *
  * @package    enrol_paypalenhanced
- * @copyright  2010 Eugene Venter
+ * @copyright  2015 Anthony Kuske <www.anthonykuske.com> 2010 Eugene Venter
  * @author     Eugene Venter - based on code by Petr Skoda and others
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
