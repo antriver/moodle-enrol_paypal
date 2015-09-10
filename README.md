@@ -1,4 +1,4 @@
-# Moodle PayPal Enhanced Enrolment Plugin
+# Moodle Enhanced PayPal Enrolment Plugin
 Provides the same functionality as the built-in PayPal enrolment method, plus the ability to specify "prerequisite courses" and "conflicting courses" to allow/disallow enrolments as appropriate.
 
 #### Prerequisite courses
