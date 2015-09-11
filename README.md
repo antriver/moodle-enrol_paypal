@@ -9,6 +9,9 @@ The enrolment method will only be shown to the user if they are enroled in all o
 
 The enrolment method will NOT be shown to the user if they are enroled in any of these courses.
 
+## Screenshots
+![](https://www.classroomtechtools.com/assets/img/moodle-plugin-screenshots/enrol_paypalenhanced/1.png)
+
 ## Setup
 
 ```bash
